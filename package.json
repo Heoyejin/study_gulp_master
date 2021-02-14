@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+  "name": "study_gulp_master",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Heoyejin/study_gulp_master.git",
+  "author": "yejin <yejin@ibleaders.co.kr>",
+  "license": "MIT",
+  }
+}
