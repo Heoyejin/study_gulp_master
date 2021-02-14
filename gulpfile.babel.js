@@ -11,6 +11,7 @@ import ws from "gulp-webserver";
 // 기존 Task와 충돌 할 수 있으므로 build 폴더를 clear 한 뒤에 Task 실행
 const routes = {
     pug: {
+        watchSrc: "src/**/*.pug",
         src: "src/*.pug",
         dest:"build"
     },
@@ -28,6 +29,10 @@ const prepare = gulp.series([clean]);
 const assets = gulp.series([pug]);
 
 const webserver = () => gulp.src("build").pipe(ws({port: 8088, livereload: true, open: true}))
+
+const watch = () => {
+    gulp.watch(routes.pug.watchSrc, pug);
+}
 const postDev = gulp.parallel([webserver, watch]);
 
 // export는 package.json에서 사용할 때 쓰면 댐
