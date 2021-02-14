@@ -18,6 +18,8 @@ import miniCSS from "gulp-csso";
 // https://www.npmjs.com/package/gulp-bro
 import bro from "gulp-bro";
 import babelify from "babelify"
+// https://www.npmjs.com/package/gulp-gh-pages
+import ghPages from "gulp-gh-pages";
 
 sass.compiler = require("node-sass");
 
@@ -78,7 +80,9 @@ const js = () =>
         })
     ).pipe(gulp.dest(routes.js.dest));
 
-const clean = () => del(["build"]);
+const ghDeploy = () => gulp.src("build/**/*").pipe(ghPages());
+
+const clean = () => del(["build", ".publish"]);
 
 const prepare = gulp.series([clean, img]);
 
@@ -95,4 +99,6 @@ const watch = () => {
 const postDev = gulp.parallel([webserver, watch]);
 
 // export는 package.json에서 사용할 때 쓰면 댐
-export const dev = gulp.series([prepare, assets, postDev]);
+export const build = gulp.series([prepare, assets]);
+export const dev = gulp.series([build, postDev]);
+export const deploy = gulp.series([build, ghDeploy, clean]);
