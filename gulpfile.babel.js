@@ -15,6 +15,9 @@ import sass from "gulp-sass";
 import autop from "gulp-autoprefixer"
 // https://www.npmjs.com/package/gulp-csso
 import miniCSS from "gulp-csso";
+// https://www.npmjs.com/package/gulp-bro
+import bro from "gulp-bro";
+import babelify from "babelify"
 
 sass.compiler = require("node-sass");
 
@@ -33,6 +36,11 @@ const routes = {
         watchSrc: "src/scss/**/*.scss",
         src: "src/scss/styles.scss",
         dest: "build/css"
+    },
+    js: {
+        watchSrc: "src/js/**/*.js",
+        src: "src/js/main.js",
+        dest: "build/js"
     }
 }
 
@@ -59,12 +67,22 @@ const styles = () =>
         }))
         .pipe(miniCSS())
         .pipe(gulp.dest(routes.scss.dest));
-    
+
+const js = () => 
+    gulp.src(routes.js.src)
+        .pipe(bro({
+            transform: [
+                babelify.configure({presets: ['@babel/preset-env']}),
+                ["uglifyify", {global: true}]
+            ]
+        })
+    ).pipe(gulp.dest(routes.js.dest));
+
 const clean = () => del(["build"]);
 
 const prepare = gulp.series([clean, img]);
 
-const assets = gulp.series([pug, styles]);
+const assets = gulp.series([pug, styles, js]);
 
 const webserver = () => gulp.src("build").pipe(ws({port: 8088, livereload: true, open: true}))
 
@@ -72,6 +90,7 @@ const watch = () => {
     gulp.watch(routes.pug.watchSrc, pug);
     gulp.watch(routes.img.src, img);
     gulp.watch(routes.scss.watchSrc, styles);
+    gulp.watch(routes.js.watchSrc, js);
 }
 const postDev = gulp.parallel([webserver, watch]);
 
