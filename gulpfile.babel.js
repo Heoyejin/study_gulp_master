@@ -9,6 +9,10 @@ import del from "del";
 // https://www.npmjs.com/package/gulp-webserver
 import ws from "gulp-webserver";
 import image from "gulp-image";
+// https://www.npmjs.com/package/gulp-sass
+import sass from "gulp-sass";
+
+sass.compiler = require("node-sass");
 
 // 기존 Task와 충돌 할 수 있으므로 build 폴더를 clear 한 뒤에 Task 실행
 const routes = {
@@ -20,6 +24,11 @@ const routes = {
     img:{
         src: "src/img/*",
         dest: "build/img"
+    },
+    scss: {
+        watchSrc: "src/scss/**/*.scss",
+        src: "src/scss/styles.scss",
+        dest: "build/css"
     }
 }
 
@@ -35,16 +44,24 @@ const img = () =>
         .pipe(image())
         .pipe(gulp.dest(routes.img.dest));
 
+const styles = () => 
+    gulp
+        .src(routes.scss.src)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(routes.scss.dest));
+    
 const clean = () => del(["build"]);
 
 const prepare = gulp.series([clean, img]);
 
-const assets = gulp.series([pug]);
+const assets = gulp.series([pug, styles]);
 
 const webserver = () => gulp.src("build").pipe(ws({port: 8088, livereload: true, open: true}))
 
 const watch = () => {
     gulp.watch(routes.pug.watchSrc, pug);
+    gulp.watch(routes.img.src, img);
+    gulp.watch(routes.scss.watchSrc, styles);
 }
 const postDev = gulp.parallel([webserver, watch]);
 
