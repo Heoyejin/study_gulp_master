@@ -11,6 +11,10 @@ import ws from "gulp-webserver";
 import image from "gulp-image";
 // https://www.npmjs.com/package/gulp-sass
 import sass from "gulp-sass";
+// https://www.npmjs.com/package/gulp-autoprefixer
+import autop from "gulp-autoprefixer"
+// https://www.npmjs.com/package/gulp-csso
+import miniCSS from "gulp-csso";
 
 sass.compiler = require("node-sass");
 
@@ -48,6 +52,12 @@ const styles = () =>
     gulp
         .src(routes.scss.src)
         .pipe(sass().on('error', sass.logError))
+        .pipe(autop({
+            // 지원할 브라우저 범위를 지정하는 옵션, 필요한 css속성들이 자동으로 추가 된다.
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+        .pipe(miniCSS())
         .pipe(gulp.dest(routes.scss.dest));
     
 const clean = () => del(["build"]);
