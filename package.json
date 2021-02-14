@@ -15,5 +15,7 @@
     "dev": "gulp dev",
     "build": "gulp build"
   },
+  "devDependencies": {
+    "gulp-pug": "^4.0.1"
   }
 }
