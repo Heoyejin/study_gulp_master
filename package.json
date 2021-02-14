@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@babel/register": "^7.12.13",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
   "name": "study_gulp_master",
