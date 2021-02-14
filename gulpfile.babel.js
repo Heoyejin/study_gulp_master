@@ -5,6 +5,7 @@
 import gulp from "gulp";
 // https://www.npmjs.com/package/gulp-pug
 import gpug from "gulp-pug";
+import del from "del";
 // 기존 Task와 충돌 할 수 있으므로 build 폴더를 clear 한 뒤에 Task 실행
 const routes = {
     pug: {
@@ -17,4 +18,10 @@ const pug = () =>
         .src(routes.pug.src)
         .pipe(gpug())
         .pipe(gulp.dest(routes.pug.dest)); 
-export const dev = gulp.series([pug]);
+
+const clean = () => del(["build"]);
+
+const prepare = gulp.series([clean]);
+
+const assets = gulp.series([pug]);
+export const dev = gulp.series([prepare, assets]);
