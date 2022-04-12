@@ -1,4 +1,4 @@
-# study_gulp_master
+# gulp_basic
+> Learning Gulp Basic Course
 
-Gulp - https://gulpjs.com/
-강좌 - https://nomadcoders.co/gulp-for-beginners
+출처 - https://nomadcoders.co/gulp-for-beginners
